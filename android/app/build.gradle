@@ -44,6 +44,9 @@ android {
 }
 
 dependencies {
+    // Aligne les kotlin-stdlib transitifs d'AndroidX (corrige les classes dupliquées
+    // kotlin-stdlib 1.8.x vs kotlin-stdlib-jdk8 1.6.x — fix documenté par Google).
+    implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.22')
     implementation 'androidx.webkit:webkit:1.11.0'
     implementation 'androidx.appcompat:appcompat:1.7.0'
 }
