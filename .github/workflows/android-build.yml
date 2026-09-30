@@ -67,6 +67,30 @@ jobs:
           "$ANDROID_HOME/build-tools/$BUILD_TOOLS/apksigner" verify --print-certs "$RELEASE_APK" || true
           echo "APK release size: $(du -h "$RELEASE_APK" | cut -f1)"
 
+      - name: Publish verification proof (commit comment)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BUILD_TOOLS=$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)
+          AAPT="$ANDROID_HOME/build-tools/$BUILD_TOOLS/aapt"
+          SIGNER="$ANDROID_HOME/build-tools/$BUILD_TOOLS/apksigner"
+          D=android/app/build/outputs/apk/debug/app-debug.apk
+          R=android/app/build/outputs/apk/release/app-release.apk
+          B=android/app/build/outputs/bundle/release/app-release.aab
+          {
+            echo "## ✅ DUSHOOD — Build Android vérifié (run ${{ github.run_id }})"
+            echo '```'
+            echo "== Tailles =="; ls -la "$D" "$R" "$B" | awk '{print $5, $9}'
+            echo; echo "== SHA-256 =="; sha256sum "$D" "$R" "$B"
+            echo; echo "== aapt dump badging (release) =="; "$AAPT" dump badging "$R" | head -8
+            echo; echo "== apksigner verify (release) =="; "$SIGNER" verify --print-certs "$R" 2>&1 | head -6
+            echo; echo "== Contenu clé de l'APK release =="
+            unzip -l "$R" | grep -E "AndroidManifest.xml|classes.dex|assets/index.html|assets/js/main.js|assets/assets/img/bg_title.jpg|resources.arsc"
+            echo '```'
+            echo "Artefacts téléchargeables : onglet Actions → run ${{ github.run_id }} → dushood-debug-apk / dushood-release-apk / dushood-release-aab"
+          } > /tmp/proof.md
+          gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/comments" -F body=@/tmp/proof.md
+
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
