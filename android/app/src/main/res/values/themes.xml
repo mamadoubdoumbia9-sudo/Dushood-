@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Dushood" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/dushood_night</item>
+        <item name="android:statusBarColor">@color/dushood_night</item>
+        <item name="android:navigationBarColor">@color/dushood_night</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

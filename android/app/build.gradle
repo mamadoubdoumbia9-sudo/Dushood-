@@ -1,0 +1,49 @@
+// DUSHOOD — module application Android (phases 44, 45, 46)
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.esteban.dushood'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.esteban.dushood"
+        minSdk 21          // Android 5.0+ : large compatibilité appareils
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    sourceSets {
+        main {
+            // Le jeu web complet (game/) est embarqué tel quel dans les assets de l'APK
+            assets.srcDirs = ['src/main/assets', '../../game']
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Signé avec la clé de debug pour produire un APK release installable
+            // sans exposer de secret dans le dépôt (voir docs/ANDROID_BUILD.md
+            // pour la procédure de signature de production).
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.11.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+}

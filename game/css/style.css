@@ -1,0 +1,32 @@
+/* DUSHOOD — styles hôtes : plein écran, aucun scroll, letterbox géré par le canvas */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100%; height: 100%;
+  background: #05060f;
+  overflow: hidden;
+  position: fixed;
+  touch-action: none;
+  -webkit-user-select: none; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#game {
+  display: block;
+  width: 100vw; height: 100vh;
+}
+#fatal {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(5, 6, 15, 0.94);
+  align-items: center; justify-content: center;
+  z-index: 10;
+}
+.fatal-card {
+  max-width: 420px; padding: 32px;
+  border: 2px solid rgba(255, 214, 130, 0.6);
+  border-radius: 18px;
+  color: #ffe9c2;
+  font-family: Georgia, serif;
+  text-align: center;
+}
+.fatal-title { font-size: 28px; margin-bottom: 12px; color: #ffd76e; }
+.fatal-body { font-size: 18px; line-height: 1.5; }
